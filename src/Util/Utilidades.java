@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
 public class Utilidades {
 
     public static String validaString(Object o) {
-        if (o instanceof String) {
-            return o.toString();
-        } else {
+        try {
+            return String.valueOf(o);
+        } catch (Exception e) {
             return "";
         }
     }
