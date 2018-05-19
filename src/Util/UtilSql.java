@@ -5,7 +5,13 @@
  */
 package Util;
 
+import SGPNmodel.CampoDinamico;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -74,6 +80,40 @@ public class UtilSql {
             select += " order by " + Utilidades.validaString(orderby);
         }
         return select;
+    }
+
+    public static String montaQueryInsert(HashMap atributos, String tabela) {
+        String values = "";
+        String columns = "";
+
+        for (Object object : atributos.keySet()) {
+            if (object instanceof String) {
+                String chave = (String) object;
+                columns += (chave + ",");
+                if (chave.contains("DT")) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    Date data = null;
+                    try {
+                        data = sdf.parse(Utilidades.validaString(atributos.get(object)));
+                    } catch (ParseException ex) {
+                        Logger.getLogger(UtilSql.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    java.sql.Timestamp dateStamp = null;
+                    if (data == null) {
+                        dateStamp = new java.sql.Timestamp(0);
+                    } else {
+                        dateStamp = new java.sql.Timestamp(data.getTime());
+                    }
+                    values += aplicarApostofo(dateStamp) + ",";
+                } else {
+                    values += aplicarApostofo(Utilidades.validaString(atributos.get(object))) + ",";
+                }
+
+            }
+        }
+        values = "(" + values.substring(0, values.lastIndexOf(",")) + ")";
+        columns = "(" + columns.substring(0, columns.lastIndexOf(",")) + ")";
+        return "INSERT INTO " + tabela + columns + " VALUES " + values;
     }
 
     public static String montaQuery(HashMap atributos, HashMap restricoes, String tabela, String orderby) {

@@ -16,19 +16,19 @@ public class Encryptador {
         String senhaAlterada = new Encryptador().getEncrypted(senha);
         System.out.println(senhaAlterada);
         System.out.println(new Encryptador().getDecrypted(senhaAlterada));
-        
+
         System.out.println(senha.equals(new Encryptador().getDecrypted(senhaAlterada)));
     }
 
-    public String getEncrypted(String password) {
+    public static String getEncrypted(String password) {
         return getWordEncrypted(getWordEncrypted(getWordEncrypted(password)));
     }
 
-    public String getDecrypted(String password) {
+    public static String getDecrypted(String password) {
         return getWordDecrypted(getWordDecrypted(getWordDecrypted(password)));
     }
 
-    public String getWordEncrypted(String message) {
+    private static String getWordEncrypted(String message) {
         String encrypted = "";
         for (int x = 0; x < message.length(); x++) {
             switch (String.valueOf(message.toCharArray()[x])) {
@@ -241,7 +241,7 @@ public class Encryptador {
                     encrypted += "l";
                     break;
                 }
-                case "0": {
+                /*case "0": {
                     encrypted += "P";
                     break;
                 }
@@ -280,8 +280,10 @@ public class Encryptador {
                 case "9": {
                     encrypted += "P";
                     break;
+                }*/
+                default: {
+                    encrypted += String.valueOf(message.toCharArray()[x]);
                 }
-                
 
             }
 
@@ -289,7 +291,7 @@ public class Encryptador {
         return encrypted;
     }
 
-    public String getWordDecrypted(String message) {
+    private static String getWordDecrypted(String message) {
         String encrypted = "";
         for (int x = 0; x < message.length(); x++) {
             switch (String.valueOf(message.toCharArray()[x])) {
@@ -501,6 +503,9 @@ public class Encryptador {
                 case "z": {
                     encrypted += "b";
                     break;
+                }
+                default: {
+                    encrypted += String.valueOf(message.toCharArray()[x]);
                 }
 
             }
